@@ -1,50 +1,61 @@
 package zendesk
 
-type Builder struct {
-	subdomain string
+import (
+	"github.com/parnurzeal/gorequest"
+	"strconv"
+)
 
-	accessToken string // for Oauth2 auth use
+type Request struct {
+	subDomain string
 
-	emailAddress string //for basic auth and api toke use
-	password     string // for basic auth use
+	pagination
+	*gorequest.SuperAgent
 
-	apiToken string // for api token auth
+	Errors []error
 }
 
-func New(subdomain string) *Builder {
-	return &Builder{
-		subdomain: subdomain,
+type errorOut struct {
+	Error string `json:"error"`
+}
+
+func New(subDomain string) *Request {
+	return &Request{
+		subDomain:  subDomain,
+		SuperAgent: gorequest.New(),
 	}
 }
 
-func (b *Builder) Oauth2Auth(accessToken string) *Builder {
-	b.accessToken =accessToken
-	//TODO:
+func (b *Request) Debug(enable bool)*Request{
+	b.SuperAgent.SetDebug(enable)
+	return b
 }
 
-func (b *Builder) BasicAuth(emailAddress, password string) *Builder {
-	b.emailAddress = emailAddress
-	b.password = password
-	//TODO:
+func (b *Request) Oauth2Auth(accessToken string) *Request {
+	b.Header.Add("Authorization", "Bearer "+accessToken)
+	return b
 }
 
-func (b *Builder) ApiTokenAuth(emailAddress, apiToken string) *Builder {
-	b.emailAddress = emailAddress
-	b.apiToken = apiToken
-	//TODO:
+func (b *Request) BasicAuth(emailAddress, password string) *Request {
+	b.SetBasicAuth(emailAddress, password)
+	return b
 }
 
-func (b *Builder) FindAll() {
-	//TODO:
+func (b *Request) ApiTokenAuth(emailAddress, apiToken string) *Request {
+	b.SetBasicAuth(emailAddress+"/token", apiToken)
+	return b
 }
 
-/**
-The allowed options are
+func (b *Request) setPage(page int) {
+	b.page = page
+	b.Param("page", strconv.Itoa(page))
+}
 
-per_page
-page
-sort_order
- */
-func (b *Builder) Find() {
+func (b *Request) setPerPage(perPage int) {
+	b.perPage = perPage
+	b.Param("per_page", strconv.Itoa(perPage))
+}
 
+func (b *Request) setSortOrder(sortOrder string) {
+	b.sortOrder = sortOrder
+	b.Param("sort_order", sortOrder)
 }
