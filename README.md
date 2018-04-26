@@ -7,7 +7,6 @@ zendesk api wrapper for golang.
 [![Go Report Card](https://goreportcard.com/badge/github.com/go-zendesk/zendesk)](https://goreportcard.com/report/github.com/go-zendesk/zendesk)
 [![GoDoc](https://godoc.org/github.com/go-zendesk/zendesk?status.svg)](https://godoc.org/github.com/go-zendesk/zendesk)
 
-s
 ## Installation
 
 ```bash
