@@ -1,6 +1,5 @@
 package zendesk
 
-
-func (b *Builder) Tickets() *Builder {
-
+func (b *Request) Tickets() *Request {
+	return b
 }
