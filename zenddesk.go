@@ -25,7 +25,7 @@ func New(subDomain string) *Request {
 	}
 }
 
-func (b *Request) Debug(enable bool)*Request{
+func (b *Request) Debug(enable bool) *Request {
 	b.SuperAgent.SetDebug(enable)
 	return b
 }

@@ -8,12 +8,14 @@ import (
 	"testing"
 )
 
+var testUrl = "https://my-api"
+
 func TestUsersRequest_Find(t *testing.T) {
 	gorequest.DisableTransportSwap = true
 
 	defer gock.Off()
 
-	gock.New("https://my-api").
+	gock.New(testUrl).
 		Get("/api/v2/users.json").
 		Reply(200).
 		JSON(&usersOut{
@@ -26,8 +28,7 @@ func TestUsersRequest_Find(t *testing.T) {
 		},
 		)
 
-	url := "https://my-api"
-	userOut, err := New(url).Debug(true).Users().Find()
+	userOut, err := New(testUrl).Users().Find()
 
 	if err != nil {
 		fmt.Println(err)
@@ -50,7 +51,7 @@ func TestUsersRequest_FindAll(t *testing.T) {
 
 	defer gock.Off()
 
-	gock.New("https://my-api").
+	gock.New(testUrl).
 		Get("/api/v2/users.json").
 		MatchParam("page", "1").
 		MatchParam("per_page", "100").
@@ -66,7 +67,7 @@ func TestUsersRequest_FindAll(t *testing.T) {
 		},
 		)
 
-	gock.New("https://my-api").
+	gock.New(testUrl).
 		Get("/api/v2/users.json").
 		MatchParam("page", "2").
 		MatchParam("per_page", "100").
@@ -81,8 +82,7 @@ func TestUsersRequest_FindAll(t *testing.T) {
 		},
 		)
 
-	url := "https://my-api"
-	users, err := New(url).Debug(true).Users().FindAll()
+	users, err := New(testUrl).Users().FindAll()
 
 	if err != nil {
 		fmt.Println(err)
@@ -100,4 +100,74 @@ func TestUsersRequest_FindAll(t *testing.T) {
 		},
 	}, users)
 
+}
+
+func TestRequest_GroupUsers(t *testing.T) {
+	gorequest.DisableTransportSwap = true
+
+	defer gock.Off()
+
+	gock.New(testUrl).
+		Get("/api/v2/groups/1/users.json").
+		Reply(200).
+		JSON(&usersOut{
+			Users: []user{
+				{
+					ID:  363031767271,
+					URL: "https://my-api/api/v2/users/363065702632.json",
+				},
+			}, Count: 1,
+		},
+		)
+
+	userOut, err := New(testUrl).GroupUsers(1).Find()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+
+	assert.Exactly(t, &usersOut{
+		Users: []user{
+			{
+				ID:  363031767271,
+				URL: "https://my-api/api/v2/users/363065702632.json",
+			},
+		}, Count: 1,
+	}, userOut)
+}
+
+func TestRequest_OrganizationUsers(t *testing.T) {
+	gorequest.DisableTransportSwap = true
+
+	defer gock.Off()
+
+	gock.New(testUrl).
+		Get("/api/v2/organizations/1/users.json").
+		Reply(200).
+		JSON(&usersOut{
+			Users: []user{
+				{
+					ID:  363031767271,
+					URL: "https://my-api/api/v2/users/363065702632.json",
+				},
+			}, Count: 1,
+		},
+		)
+
+	userOut, err := New(testUrl).OrganizationUsers(1).Find()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+
+	assert.Exactly(t, &usersOut{
+		Users: []user{
+			{
+				ID:  363031767271,
+				URL: "https://my-api/api/v2/users/363065702632.json",
+			},
+		}, Count: 1,
+	}, userOut)
 }

@@ -7,8 +7,8 @@ import (
 	"io/ioutil"
 	"net/url"
 	"strconv"
-	"time"
 	"strings"
+	"time"
 )
 
 type usersRequest struct {
@@ -18,9 +18,9 @@ type usersRequest struct {
 type usersOut struct {
 	Users []user `json:"users"`
 
-	NextPage     string      `json:"next_page"`
+	NextPage     string `json:"next_page"`
 	PreviousPage string `json:"previous_page"`
-	Count        int         `json:"count"`
+	Count        int    `json:"count"`
 }
 
 type user struct {
@@ -101,12 +101,12 @@ func (u *usersRequest) FindAll() ([]user, []error) {
 			break
 		}
 
-		users = append(users,userOur.Users...)
+		users = append(users, userOur.Users...)
 
 		if userOur.NextPage == "" {
 			break
 		} else {
-			query:=strings.Split(userOur.NextPage,"?")[1]
+			query := strings.Split(userOur.NextPage, "?")[1]
 			values, error := url.ParseQuery(query)
 			if error != nil {
 				u.Errors = append(u.Errors, error)
