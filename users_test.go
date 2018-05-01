@@ -1,11 +1,12 @@
 package zendesk
 
 import (
-	"fmt"
+	"testing"
+
+	"gopkg.in/h2non/gock.v1"
+
 	"github.com/parnurzeal/gorequest"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/h2non/gock.v1"
-	"testing"
 )
 
 var testUrl = "https://my-api"
@@ -30,10 +31,7 @@ func TestUsersRequest_Find(t *testing.T) {
 
 	userOut, err := New(testUrl).Users().Find()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+	assert.Nil(t, err)
 
 	assert.Exactly(t, &usersOut{
 		Users: []user{
@@ -84,10 +82,7 @@ func TestUsersRequest_FindAll(t *testing.T) {
 
 	users, err := New(testUrl).Users().FindAll()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+	assert.Nil(t, err)
 
 	assert.Exactly(t, []user{
 		{
@@ -122,10 +117,7 @@ func TestRequest_GroupUsers(t *testing.T) {
 
 	userOut, err := New(testUrl).GroupUsers(1).Find()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+	assert.Nil(t, err)
 
 	assert.Exactly(t, &usersOut{
 		Users: []user{
@@ -157,10 +149,7 @@ func TestRequest_OrganizationUsers(t *testing.T) {
 
 	userOut, err := New(testUrl).OrganizationUsers(1).Find()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-	assert.Nil(t, err, fmt.Sprintf("%+v", err))
+	assert.Nil(t, err)
 
 	assert.Exactly(t, &usersOut{
 		Users: []user{
