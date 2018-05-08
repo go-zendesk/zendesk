@@ -29,7 +29,7 @@ func TestUsersRequest_Find(t *testing.T) {
 		},
 		)
 
-	userOut, err := New(testUrl).Users().Find()
+	userOut, err := New(testUrl).Users().Page(1).PerPage(10).Find()
 
 	assert.Nil(t, err)
 
@@ -158,5 +158,37 @@ func TestRequest_OrganizationUsers(t *testing.T) {
 				URL: "https://my-api/api/v2/users/363065702632.json",
 			},
 		}, Count: 1,
+	}, userOut)
+}
+
+func TestRequest_Users(t *testing.T) {
+	gorequest.DisableTransportSwap = true
+
+	defer gock.Off()
+
+	gock.New(testUrl).
+		Get("/api/v2/users/123.json").
+		Reply(200).
+		JSON(&usersOut{
+			Users: []user{
+				{
+					ID:  123,
+					URL: "https://my-api/api/v2/users/123.json",
+				},
+			},
+		},
+		)
+
+	userOut, err := New(testUrl).User(123).Find()
+
+	assert.Nil(t, err)
+
+	assert.Exactly(t, &usersOut{
+		Users: []user{
+			{
+				ID:  123,
+				URL: "https://my-api/api/v2/users/123.json",
+			},
+		},
 	}, userOut)
 }

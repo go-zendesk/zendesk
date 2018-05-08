@@ -18,9 +18,9 @@ type usersRequest struct {
 type usersOut struct {
 	Users []user `json:"users"`
 
-	NextPage     string `json:"next_page"`
-	PreviousPage string `json:"previous_page"`
-	Count        int    `json:"count"`
+	NextPage     string `json:"next_page,omitempty"`
+	PreviousPage string `json:"previous_page,omitempty"`
+	Count        int    `json:"count,omitempty"`
 }
 
 type user struct {
@@ -82,6 +82,13 @@ func (b *Request) GroupUsers(id int) *usersRequest {
 //GET /api/v2/organizations/{id}/users.json
 func (b *Request) OrganizationUsers(id int) *usersRequest {
 	url := fmt.Sprintf("%s/api/v2/organizations/%d/users.json", b.subDomain, id)
+	b.Get(url)
+	return &usersRequest{Request: b}
+}
+
+//GET /api/v2/users/{id}.json
+func (b *Request) User(id int) *usersRequest {
+	url := fmt.Sprintf("%s/api/v2/users/%d.json", b.subDomain, id)
 	b.Get(url)
 	return &usersRequest{Request: b}
 }
