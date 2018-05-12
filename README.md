@@ -24,8 +24,7 @@ $ go get -u github.com/go-zendesk/zendesk
 - [x] GET /api/v2/users/{id}.json
 
 ### Show Many Users
-- [ ] GET /api/v2/users/show_many.json?ids={ids}
-
+- [x] GET /api/v2/users/show_many.json?ids={ids}
 - [ ] GET /api/v2/users/show_many.json?external_ids={external_ids}
 
 ### User related information

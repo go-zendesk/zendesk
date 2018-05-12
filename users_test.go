@@ -192,3 +192,36 @@ func TestRequest_Users(t *testing.T) {
 		},
 	}, userOut)
 }
+
+func TestRequest_ShowMany(t *testing.T) {
+	gorequest.DisableTransportSwap = true
+
+	defer gock.Off()
+
+	gock.New(testUrl).
+		Get("/api/v2/users/show_many.json").
+		MatchParam("ids", "123,456").
+		Reply(200).
+		JSON(&usersOut{
+			Users: []user{
+				{
+					ID:  123,
+					URL: "https://my-api/api/v2/users/123.json",
+				},
+			},
+		},
+		)
+
+	userOut, err := New(testUrl).ShowMany("123,456").Find()
+
+	assert.Nil(t, err)
+
+	assert.Exactly(t, &usersOut{
+		Users: []user{
+			{
+				ID:  123,
+				URL: "https://my-api/api/v2/users/123.json",
+			},
+		},
+	}, userOut)
+}

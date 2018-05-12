@@ -93,6 +93,14 @@ func (b *Request) User(id int) *usersRequest {
 	return &usersRequest{Request: b}
 }
 
+//GET /api/v2/users/show_many.json?ids={ids}
+func (b *Request) ShowMany(ids string) *usersRequest {
+	url := fmt.Sprintf("%s/api/v2/users/show_many.json?ids=%s", b.subDomain, ids)
+	b.SetDebug(true)
+	b.Get(url)
+	return &usersRequest{Request: b}
+}
+
 //find all page
 func (u *usersRequest) FindAll() ([]user, []error) {
 	var users []user

@@ -15,7 +15,8 @@ type Request struct {
 }
 
 type errorOut struct {
-	Error string `json:"error"`
+	Error       string `json:"error"`
+	Description string `json:"description"`
 }
 
 func New(subDomain string) *Request {
